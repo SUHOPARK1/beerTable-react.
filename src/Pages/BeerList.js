@@ -180,7 +180,7 @@ const BeerList = () => {
                             <li>tagline: {row.tagline}</li>
                             <li>firstBrewed: {row.first_brewed}</li>
                             <li>description: {row.description}</li>
-                            <li>image: <img style={{width:100, height:100}} src={row.image_url}/></li>
+                            <li>image: <img style={{width:'60px', height:'200px'}} src={row.image_url}/></li>
                             <li>abv: {row.abv}</li>
                             <li>ibu: {row.ibu}</li>
                             <li>target_fg: {row.target_fg}</li>
@@ -189,6 +189,10 @@ const BeerList = () => {
                             <li>srm: {row.srm}</li>
                             <li>ph: {row.ph}</li>
                             <li>attenuation_level: {row.attenuation_level}</li>
+
+                            ({row.volume.value} != 0 ?<li>volume-value: {row.volume.value}</li>:<>데이터 없음</>)
+
+
                             {/*<li>volume-value: {row.volume.value}</li>*/}
                             {/*<li>volume-unit: ${row.volume.unit}</li>*/}
                             {/*<li>boil_volume-value: ${row.boil_volume.value}</li>*/}
