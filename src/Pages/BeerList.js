@@ -46,7 +46,6 @@ const BeerList = () => {
             try {
                 const {data} = await Axios
                     .get('https://api.punkapi.com/v2/beers');
-                console.log(data);
                 setBeerList(data)
                 setFilterData(data)
             } catch (err) {
@@ -70,8 +69,13 @@ const BeerList = () => {
         { title : "Alcohol by Volume", field: "abv" } ];
 
     const [open, setOpen] = useState(false);
-    const handleOpen = (row) => { setOpen(true) };
-    const handleClose = (row) => { setOpen(false) };
+
+    const handleOpen = (row) => {
+        setOpen(true);
+        console.log(row)
+    };
+
+    const handleClose = () => { setOpen(false) };
 
     useEffect(()=>{
         setFilterData(
@@ -89,10 +93,8 @@ const BeerList = () => {
                                            : ( abv === '12to13' ? beerList.filter(data => data.abv >= 12.00 && data.abv <= 12.99)
                                            : ( abv === '13to14' ? beerList.filter(data => data.abv >= 13.00 && data.abv <= 13.99)
                                            : ( abv === '14to15' ? beerList.filter(data => data.abv >= 14.00 && data.abv <= 14.99)
-                                           : ( abv === '15more' ? beerList.filter(data => data.abv >= 15.00 && data.abv <= 100)
-                                           :  <></>
-
-                      ))))))))))))))))
+                                           : ( abv === '15more' ? beerList.filter(data => data.abv >= 15.00)
+                                           :  <>No records to display</> ))))))))))))))))
     },[abv])
 
     const alertMyRow = (row) => (
@@ -162,6 +164,7 @@ const BeerList = () => {
     return (
         <>
             <div><br/>
+                &nbsp;&nbsp;
                 <Button>
                     <Link to='/Home'>
                         홈으로
@@ -213,13 +216,12 @@ const BeerList = () => {
                                 <MenuItem value={'13to14'}>13~14</MenuItem>
                                 <MenuItem value={'14to15'}>14~15</MenuItem>
                                 <MenuItem value={'15more'}>15more</MenuItem>
-
                             </Select>,
                             isFreeAction: true },
 
                         { tooltip: 'select items',
                           icon: () => <ShoppingCart/>,
-                          onClick: (evt, data) => alert(data.length + '개가 담겼습니다.')
+                          onClick: (evt, row) => console.log(row)
                         }]}
                 />
                 <Modal
@@ -230,11 +232,13 @@ const BeerList = () => {
                     onClose={handleClose}
                     closeAfterTransition
                     BackdropProps={{ timeout: 500 }} >
+
+                    \
                     <Fade in={open}>
                         <div className={classes.paper}>
                             <h2>Animated React Modal</h2>
                             <p>
-                                {/*{row.name}*/}
+
                             </p>
                         </div>
                     </Fade>
