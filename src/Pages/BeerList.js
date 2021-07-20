@@ -39,18 +39,17 @@ const BeerList = () => {
 
     const classes = useStyles();
 
-    const [beerList, setBeerList] = useState();
+    const [beerList, setBeerList] = useState([]);
+
+    const [row, setRow] = useState([]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const {data} = await Axios
-                    .get('https://api.punkapi.com/v2/beers');
-                setBeerList(data)
-                setFilterData(data)
-            } catch (err) {
-                alert("에러입니다.")
-            }}
+        const fetchData = async() => {
+           Axios.get('https://api.punkapi.com/v2/beers').then(({data}) =>{
+                    setBeerList(data)
+                    setFilterData(data)
+                })
+            .catch (err => alert("에러입니다."))}
         fetchData().then(r => null);
     }, []);
 
@@ -63,16 +62,17 @@ const BeerList = () => {
         { title: "No", field: "id" },
         { title: "BeerName", field: "name",
             render:(row)=>
-                <a href={'#'} onClick={() => handleOpen(row)}>
+                <a href={'#'} onClick={() => {handleOpen(row)}}>
                     {row.name}
                 </a> },
         { title : "Alcohol by Volume", field: "abv" } ];
 
     const [open, setOpen] = useState(false);
 
-    const handleOpen = (row) => {
+    const handleOpen = (datarow) => {
         setOpen(true);
-        console.log(row)
+        setRow(datarow);
+        console.log(datarow)
     };
 
     const handleClose = () => { setOpen(false) };
@@ -224,7 +224,7 @@ const BeerList = () => {
                           onClick: (evt, row) => console.log(row)
                         }]}
                 />
-                <Modal
+                    <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
                     className={classes.modal}
@@ -232,16 +232,12 @@ const BeerList = () => {
                     onClose={handleClose}
                     closeAfterTransition
                     BackdropProps={{ timeout: 500 }} >
-
-                    \
-                    <Fade in={open}>
                         <div className={classes.paper}>
                             <h2>Animated React Modal</h2>
                             <p>
-
+                                {row.name}
                             </p>
                         </div>
-                    </Fade>
                 </Modal>
             </div>
         </>
