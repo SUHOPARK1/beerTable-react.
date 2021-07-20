@@ -1,12 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import { forwardRef } from 'react';
-import MaterialTable from 'material-table';
-import Axios from 'axios';
-import {ChevronLeft, ChevronRight, Clear, FirstPage, LastPage, Search, ShoppingCart} from '@material-ui/icons/';
-import { Modal, makeStyles, Backdrop, Fade, Checkbox, Select, MenuItem  } from "@material-ui/core";
-import { FilterOutlined } from "@ant-design/icons"
+import React, { useState, useEffect, forwardRef } from 'react';
 import {Link} from "react-router-dom";
-import {Button} from "antd";
+import Axios from 'axios';
+import MaterialTable from 'material-table';
+import { Button } from "antd";
+import { FilterOutlined } from "@ant-design/icons"
+import { Modal, makeStyles, Checkbox, Select, MenuItem  } from "@material-ui/core";
+import { ChevronLeft, ChevronRight, Clear, FirstPage, LastPage, Search, ShoppingCart } from '@material-ui/icons/';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -45,26 +44,12 @@ const tableIcons = {
 const BeerList = () => {
 
     const classes = useStyles();
-
-    const [beerList, setBeerList] = useState([]);
-
+    const [beerList, setBeerList] = useState();
     const [row, setRow] = useState([]);
-
-    useEffect(() => {
-        const fetchData = async() => {
-           Axios.get('https://api.punkapi.com/v2/beers').then(({data}) =>{
-                    setBeerList(data)
-                    setFilterData(data)
-                })
-            .catch (err => alert("에러입니다."))}
-        fetchData().then(r => null);
-    }, []);
-
     const [filterData, setFilterData] = useState(beerList);
     const [filter, setFilter] = useState(false);
-
     const [abv, setAbv] = useState('All');
-    const handleChange = () => { setFilter(!filter) };
+    const [open, setOpen] = useState(false);
     const columns = [
         { title: "No", field: "id" },
         { title: "BeerName", field: "name",
@@ -74,27 +59,33 @@ const BeerList = () => {
                 </a> },
         { title : "Alcohol by Volume", field: "abv" } ];
 
-    const [open, setOpen] = useState(false);
-
+    const handleChange = () => { setFilter(!filter) };
     const handleOpen = (datarow) => {
-        setOpen(true);
-        setRow(datarow);
-        console.log(datarow)
-    };
-
+        setOpen(true)
+        setRow(datarow)};
     const handleClose = () => { setOpen(false) };
 
-    useEffect(()=>{
+    useEffect(() => {
+        const fetchData = async() => {
+            Axios.get('https://api.punkapi.com/v2/beers').then(({data}) =>{
+                setBeerList(data)
+                setFilterData(data)
+            })
+                .catch (err => alert("에러입니다."))}
+        fetchData().then(r => null);
+    }, []);
+
+    useEffect(() => {
         setFilterData(
-            abv === 'All' ? beerList : ( abv === '1to2' ? beerList.filter(data => data.abv >= 1.00 && data.abv <= 1.99)
-                                           : ( abv === '2to3' ? beerList.filter(data => data.abv >= 2.00 && data.abv <= 2.99)
-                                           : ( abv === '3to4' ? beerList.filter(data => data.abv >= 3.00 && data.abv <= 3.99)
-                                           : ( abv === '4to5' ? beerList.filter(data => data.abv >= 4.00 && data.abv <= 4.99)
-                                           : ( abv === '5to6' ? beerList.filter(data => data.abv >= 5.00 && data.abv <= 5.99)
-                                           : ( abv === '6to7' ? beerList.filter(data => data.abv >= 6.00 && data.abv <= 6.99)
-                                           : ( abv === '7to8' ? beerList.filter(data => data.abv >= 7.00 && data.abv <= 7.99)
-                                           : ( abv === '8to9' ? beerList.filter(data => data.abv >= 8.00 && data.abv <= 8.99)
-                                           : ( abv === '9to10' ? beerList.filter(data => data.abv >= 9.00 && data.abv <= 9.99)
+            abv === 'All' ? beerList : ( abv === '1to2'   ? beerList.filter(data => data.abv >= 1.00  && data.abv <= 1.99)
+                                           : ( abv === '2to3'   ? beerList.filter(data => data.abv >= 2.00  && data.abv <= 2.99)
+                                           : ( abv === '3to4'   ? beerList.filter(data => data.abv >= 3.00  && data.abv <= 3.99)
+                                           : ( abv === '4to5'   ? beerList.filter(data => data.abv >= 4.00  && data.abv <= 4.99)
+                                           : ( abv === '5to6'   ? beerList.filter(data => data.abv >= 5.00  && data.abv <= 5.99)
+                                           : ( abv === '6to7'   ? beerList.filter(data => data.abv >= 6.00  && data.abv <= 6.99)
+                                           : ( abv === '7to8'   ? beerList.filter(data => data.abv >= 7.00  && data.abv <= 7.99)
+                                           : ( abv === '8to9'   ? beerList.filter(data => data.abv >= 8.00  && data.abv <= 8.99)
+                                           : ( abv === '9to10'  ? beerList.filter(data => data.abv >= 9.00  && data.abv <= 9.99)
                                            : ( abv === '10to11' ? beerList.filter(data => data.abv >= 10.00 && data.abv <= 10.99)
                                            : ( abv === '11to12' ? beerList.filter(data => data.abv >= 11.00 && data.abv <= 11.99)
                                            : ( abv === '12to13' ? beerList.filter(data => data.abv >= 12.00 && data.abv <= 12.99)
@@ -126,7 +117,6 @@ const BeerList = () => {
                         selection: true,
                         filtering: filter
                     }}
-
                     actions={[
                         { icon: () => <Checkbox
                                 checked={filter}
@@ -161,13 +151,15 @@ const BeerList = () => {
                                 <MenuItem value={'15more'}>15more</MenuItem>
                             </Select>,
                             isFreeAction: true },
-
                         { tooltip: 'select items',
-                          icon: () => <ShoppingCart/>,
-                          onClick: (evt, row) => console.log(row)
+                            icon: () => <ShoppingCart/>,
+                            onClick: (evt, row) => console.log(row)
                         }]}
                 />
-                    <Modal
+
+                { row != 0 ? row.ingredients != 0 ? row.ingredients.malt[1] != 0 ?
+                <>
+                <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"
                     className={classes.modal}
@@ -175,77 +167,81 @@ const BeerList = () => {
                     onClose={handleClose}
                     closeAfterTransition
                     BackdropProps={{ timeout: 500 }} >
-                        <div className={classes.paper}>
-                            <h2>{row.name}</h2>
-                            <li>tagline: {row.tagline}</li>
-                            <li>firstBrewed: {row.first_brewed}</li>
-                            <li>description: {row.description}</li>
-                            <li>image: <img style={{width:'60px', height:'200px'}} src={row.image_url}/></li>
-                            <li>abv: {row.abv}</li>
-                            <li>ibu: {row.ibu}</li>
-                            <li>target_fg: {row.target_fg}</li>
-                            <li>target_og: {row.target_og}</li>
-                            <li>ebc: {row.ebc}</li>
-                            <li>srm: {row.srm}</li>
-                            <li>ph: {row.ph}</li>
-                            <li>attenuation_level: {row.attenuation_level}</li>
+                    <div className={classes.paper}>
+                        <h2>{row.name}</h2>
+                        <li>tagline: {row.tagline}</li>
+                        <li>firstBrewed: {row.first_brewed}</li>
+                        <li>description: {row.description}</li>
+                        <li>image: <img style={{width:'60px', height:'200px'}} src={row.image_url}/></li>
+                        <li>abv: {row.abv}</li>
+                        <li>ibu: {row.ibu}</li>
+                        <li>target_fg: {row.target_fg}</li>
+                        <li>target_og: {row.target_og}</li>
+                        <li>ebc: {row.ebc}</li>
+                        <li>srm: {row.srm}</li>
+                        <li>ph: {row.ph}</li>
+                        <li>attenuation_level: {row.attenuation_level}</li>
+                        <li>volume-value:{row.volume.value}</li>
+                        <li>volume-unit: {row.volume.unit}</li>
+                        <li>boil_volume-value: {row.boil_volume.value}</li>
+                        <li>boil_volume-unit: {row.boil_volume.unit}</li>
+                        <li>method-mash_temp-temp-value: {row.method.mash_temp[0].temp.value}</li>
+                        <li>method-mash_temp-temp-unit: {row.method.mash_temp[0].temp.unit}</li>
+                        <li>method-mash_temp-duration: {row.method.mash_temp[0].duration}</li>
+                        <li>method-fermentation-temp-value: {row.method.fermentation.temp.value}</li>
+                        <li>method-fermentation-temp-unit: {row.method.fermentation.temp.unit}</li>
+                        <li>method-twist: {row.method.twist}</li>
+                        <li>ingredients-malt1-name: {row.ingredients.malt[0].name}</li>
+                        <li>ingredients-malt1-amount-value: {row.ingredients.malt[0].amount.value}</li>
+                        <li>ingredients-malt1-amount-value: {row.ingredients.malt[0].amount.unit}</li>
 
-                            ({row.volume.value} != 0 ?<li>volume-value: {row.volume.value}</li>:<>데이터 없음</>)
+                        { row.ingredients.malt[1] != 0 ? <div>
+                        <li>ingredients-malt2-name: {row.ingredients.malt[1].name}</li>
+                        <li>ingredients-malt2-amount-value: {row.ingredients.malt[1].amount.value}</li>
+                        <li>ingredients-malt2-amount-value: {row.ingredients.malt[1].amount.unit}</li>
+                        </div> : <></>}
 
+                        {/*<li>ingredients-malt3-name: {row.ingredients.malt[2].name}</li>*/}
+                        {/*<li>ingredients-malt3-amount-value3 {row.ingredients.malt[2].amount.value}</li>*/}
+                        {/*<li>ingredients-malt3-amount-value: {row.ingredients.malt[2].amount.unit}</li>*/}
 
-                            {/*<li>volume-value: {row.volume.value}</li>*/}
-                            {/*<li>volume-unit: ${row.volume.unit}</li>*/}
-                            {/*<li>boil_volume-value: ${row.boil_volume.value}</li>*/}
-                            {/*<li>boil_volume-unit: ${row.boil_volume.unit}</li>*/}
-                            {/*<li>method-mash_temp-temp-value: ${row.method.mash_temp[0].temp.value}</li>*/}
-                            {/*<li>method-mash_temp-temp-unit: ${row.method.mash_temp[0].temp.unit}</li>*/}
-                            {/*<li>method-mash_temp-duration: ${row.method.mash_temp[0].duration}</li>*/}
-                            {/*<li>method-fermentation-temp-value: ${row.method.fermentation.temp.value}</li>*/}
-                            {/*<li>method-fermentation-temp-unit: ${row.method.fermentation.temp.unit}</li>*/}
-                            {/*<li>method-twist: ${row.method.twist}</li>*/}
-                            {/*<li>ingredients-malt-name: ${row.ingredients.malt[0].name}</li>*/}
-                            {/*<li>ingredients-malt-amount-value: ${row.ingredients.malt[0].amount.value}</li>*/}
-                            {/*<li>ingredients-malt-amount-value: ${row.ingredients.malt[0].amount.unit}</li>*/}
-                            {/*<li>ingredients-malt-name: ${row.ingredients.malt[1].name}</li>*/}
-                            {/*<li>ingredients-malt-amount-value: ${row.ingredients.malt[1].amount.value}</li>*/}
-                            {/*<li>ingredients-malt-amount-value: ${row.ingredients.malt[1].amount.unit}</li>*/}
-                            {/*<li>ingredients-malt-name: ${row.ingredients.malt[2].name}</li>*/}
-                            {/*<li>ingredients-malt-amount-value: ${row.ingredients.malt[2].amount.value}</li>*/}
-                            {/*<li>ingredients-malt-amount-value: ${row.ingredients.malt[2].amount.unit}</li>*/}
-                            {/*<li>ingredients-hops1-name: ${row.ingredients.hops[0].name}</li>*/}
-                            {/*<li>ingredients-hops1-amount-value: ${row.ingredients.hops[0].amount.value}</li>*/}
-                            {/*<li>ingredients-hops1-amount-value: ${row.ingredients.hops[0].amount.unit}</li>*/}
-                            {/*<li>ingredients-hops1-add: ${row.ingredients.hops[0].add}</li>*/}
-                            {/*<li>ingredients-hops1-attribute: ${row.ingredients.hops[0].attribute}</li>*/}
-                            {/*<li>ingredients-hops2-name: ${row.ingredients.hops[1].name}</li>*/}
-                            {/*<li>ingredients-hops2-amount-value: ${row.ingredients.hops[1].amount.value}</li>*/}
-                            {/*<li>ingredients-hops2-amount-value: ${row.ingredients.hops[1].amount.unit}</li>*/}
-                            {/*<li>ingredients-hops2-add: ${row.ingredients.hops[1].add}</li>*/}
-                            {/*<li>ingredients-hops2-attribute: ${row.ingredients.hops[1].attribute}</li>*/}
-                            {/*<li>ingredients-hops3-name: ${row.ingredients.hops[2].name}</li>*/}
-                            {/*<li>ingredients-hops3-amount-value: ${row.ingredients.hops[2].amount.value}</li>*/}
-                            {/*<li>ingredients-hops3-amount-value: ${row.ingredients.hops[2].amount.unit}</li>*/}
-                            {/*<li>ingredients-hops3-add: ${row.ingredients.hops[2].add}</li>*/}
-                            {/*<li>ingredients-hops3-attribute: ${row.ingredients.hops[2].attribute}</li>*/}
-                            {/*<li>ingredients-hops4-name: ${row.ingredients.hops[3].name}</li>*/}
-                            {/*<li>ingredients-hops4-amount-value: ${row.ingredients.hops[3].amount.value}</li>*/}
-                            {/*<li>ingredients-hops4-amount-value: ${row.ingredients.hops[3].amount.unit}</li>*/}
-                            {/*<li>ingredients-hops4-add: {row.ingredients.hops[3].add}</li>*/}
-                            {/*<li>ingredients-hops4-attribute: {row.ingredients.hops[3].attribute}</li>*/}
-                            {/*<li>ingredients-hops5-name: {row.ingredients.hops[4].name}</li>*/}
-                            {/*<li>ingredients-hops5-amount-value: {row.ingredients.hops[4].amount.value}</li>*/}
-                            {/*<li>ingredients-hops5-amount-value: {row.ingredients.hops[4].amount.unit}</li>*/}
-                            {/*<li>ingredients-hops5-add: {row.ingredients.hops[4].add}</li>*/}
-                            {/*<li>ingredients-hops5-attribute: {row.ingredients.hops[4].attribute}</li>*/}
-                            {/*<li>ingredients-yeast: {row.ingredients.yeast}</li>*/}
-                            {/*<li>food_pairing: {row.food_pairing}</li>*/}
-                            {/*<li>brewers_tips: {row.brewers_tips}</li>*/}
-                            {/*<li>contributed_by: {row.contributed_by}</li>*/}
-                        </div>
+                        <li>ingredients-hops1-name: {row.ingredients.hops[0].name}</li>
+                        <li>ingredients-hops1-amount-value: {row.ingredients.hops[0].amount.value}</li>
+                        <li>ingredients-hops1-amount-value: {row.ingredients.hops[0].amount.unit}</li>
+                        <li>ingredients-hops1-add: {row.ingredients.hops[0].add}</li>
+                        <li>ingredients-hops1-attribute: {row.ingredients.hops[0].attribute}</li>
+
+                        {/*<li>ingredients-hops2-name: {row.ingredients.hops[1].name}</li>*/}
+                        {/*<li>ingredients-hops2-amount-value: {row.ingredients.hops[1].amount.value}</li>*/}
+                        {/*<li>ingredients-hops2-amount-value: {row.ingredients.hops[1].amount.unit}</li>*/}
+                        {/*<li>ingredients-hops2-add: {row.ingredients.hops[1].add}</li>*/}
+                        {/*<li>ingredients-hops2-attribute: {row.ingredients.hops[1].attribute}</li>*/}
+                        {/*<li>ingredients-hops3-name: {row.ingredients.hops[2].name}</li>*/}
+                        {/*<li>ingredients-hops3-amount-value: {row.ingredients.hops[2].amount.value}</li>*/}
+                        {/*<li>ingredients-hops3-amount-value: {row.ingredients.hops[2].amount.unit}</li>*/}
+                        {/*<li>ingredients-hops3-add: {row.ingredients.hops[2].add}</li>*/}
+                        {/*<li>ingredients-hops3-attribute: {row.ingredients.hops[2].attribute}</li>*/}
+                        {/*<li>ingredients-hops4-name: {row.ingredients.hops[3].name}</li>*/}
+                        {/*<li>ingredients-hops4-amount-value: {row.ingredients.hops[3].amount.value}</li>*/}
+                        {/*<li>ingredients-hops4-amount-value: {row.ingredients.hops[3].amount.unit}</li>*/}
+                        {/*<li>ingredients-hops4-add: {row.ingredients.hops[3].add}</li>*/}
+                        {/*<li>ingredients-hops4-attribute: {row.ingredients.hops[3].attribute}</li>*/}
+
+                        {/*<li>ingredients-hops5-name: {row.ingredients.hops[4].name}</li>*/}
+                        {/*<li>ingredients-hops5-amount-value: {row.ingredients.hops[4].amount.value}</li>*/}
+                        {/*<li>ingredients-hops5-amount-value: {row.ingredients.hops[4].amount.unit}</li>*/}
+                        {/*<li>ingredients-hops5-add: {row.ingredients.hops[4].add}</li>*/}
+                        {/*<li>ingredients-hops5-attribute: {row.ingredients.hops[4].attribute}</li>*/}
+
+                        <li>ingredients-yeast: {row.ingredients.yeast}</li>
+                        <li>food_pairing: {row.food_pairing}</li>
+                        <li>brewers_tips: {row.brewers_tips}</li>
+                        <li>contributed_by: {row.contributed_by}</li>
+                    </div>
                 </Modal>
+                </> : <></> : <></> : <></>}
             </div>
         </>
-    )
-};
+    )};
 
 export default BeerList;
