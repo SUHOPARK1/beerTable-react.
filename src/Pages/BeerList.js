@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { forwardRef } from 'react';
-import {MaterialTable,MTableHeader }from 'material-table';
+import MaterialTable from 'material-table';
 import Axios from 'axios';
 import {ChevronLeft, ChevronRight, Clear, FirstPage, LastPage, Search, ShoppingCart} from '@material-ui/icons/';
-import { Modal, makeStyles, Backdrop, Fade, Button, Checkbox, Select, MenuItem  } from "@material-ui/core";
+import { Modal, makeStyles, Backdrop, Fade, Checkbox, Select, MenuItem  } from "@material-ui/core";
 import { FilterOutlined } from "@ant-design/icons"
+import {Link} from "react-router-dom";
+import {Button} from "antd";
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -72,7 +74,25 @@ const BeerList = () => {
     const handleClose = (row) => { setOpen(false) };
 
     useEffect(()=>{
-        setFilterData(abv === 'All' ? beerList : beerList.filter(data => data.abv === abv))
+        setFilterData(
+            abv === 'All' ? beerList : ( abv === '1to2' ? beerList.filter(data => data.abv >= 1.00 && data.abv <= 1.99)
+                                           : ( abv === '2to3' ? beerList.filter(data => data.abv >= 2.00 && data.abv <= 2.99)
+                                           : ( abv === '3to4' ? beerList.filter(data => data.abv >= 3.00 && data.abv <= 3.99)
+                                           : ( abv === '4to5' ? beerList.filter(data => data.abv >= 4.00 && data.abv <= 4.99)
+                                           : ( abv === '5to6' ? beerList.filter(data => data.abv >= 5.00 && data.abv <= 5.99)
+                                           : ( abv === '6to7' ? beerList.filter(data => data.abv >= 6.00 && data.abv <= 6.99)
+                                           : ( abv === '7to8' ? beerList.filter(data => data.abv >= 7.00 && data.abv <= 7.99)
+                                           : ( abv === '8to9' ? beerList.filter(data => data.abv >= 8.00 && data.abv <= 8.99)
+                                           : ( abv === '9to10' ? beerList.filter(data => data.abv >= 9.00 && data.abv <= 9.99)
+                                           : ( abv === '10to11' ? beerList.filter(data => data.abv >= 10.00 && data.abv <= 10.99)
+                                           : ( abv === '11to12' ? beerList.filter(data => data.abv >= 11.00 && data.abv <= 11.99)
+                                           : ( abv === '12to13' ? beerList.filter(data => data.abv >= 12.00 && data.abv <= 12.99)
+                                           : ( abv === '13to14' ? beerList.filter(data => data.abv >= 13.00 && data.abv <= 13.99)
+                                           : ( abv === '14to15' ? beerList.filter(data => data.abv >= 14.00 && data.abv <= 14.99)
+                                           : ( abv === '15more' ? beerList.filter(data => data.abv >= 15.00 && data.abv <= 100)
+                                           :  <></>
+
+                      ))))))))))))))))
     },[abv])
 
     const alertMyRow = (row) => (
@@ -141,74 +161,87 @@ const BeerList = () => {
 
     return (
         <>
-        <div>
-            <MaterialTable
-                icons={tableIcons}
-                columns={columns}
-                data={filterData}
-                title="맥주 리스트"
-                options={{
-                    pageSize:25,
-                    pageSizeOptions:'',
-                    selection: true,
-                    filtering: filter }}
-                tableRef={this.tableRef}
-                components={{
-                    Header: props => (
-                        <MTableHeader {...props} onOrderChange={this.handleSortOrderChange} orderBy={this.state.sortedColumnId} orderDirection={this.state.sortedColumnDirection}  />
-                    )
-                }}
+            <div><br/>
+                <Button>
+                    <Link to='/Home'>
+                        홈으로
+                    </Link>
+                </Button>
+            </div><br/>
+            <div>
+                <MaterialTable
+                    icons={tableIcons}
+                    columns={columns}
+                    data={filterData}
+                    title="맥주 리스트"
+                    options={{
+                        pageSize: 25,
+                        pageSizeOptions: '',
+                        selection: true,
+                        filtering: filter
+                    }}
 
-                actions={[
-                    { icon: () => <Checkbox
-                            checked={filter}
-                            onChange={handleChange}
-                            inputProps={{ 'aria-label': 'primary checkbox' }} />,
-                      tooltip:"Hide/Show Filter Option",
-                      isFreeAction:true },
-                    { icon: () => <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={abv}
-                            onChange={(e)=>{setAbv(e.target.value)}}
-                            style={{width:150}}
-                        >
-                            <MenuItem value={"All"}>Alcohol Range</MenuItem>
-                            <MenuItem value={1}>1-2</MenuItem>
-                            <MenuItem value={2}>2-3</MenuItem>
-                            <MenuItem value={3}>3-4</MenuItem>
-                            <MenuItem value={4.1}>4.1</MenuItem>
-                        </Select>,
-                        isFreeAction:true },
+                    actions={[
+                        { icon: () => <Checkbox
+                                checked={filter}
+                                onChange={handleChange}
+                                inputProps={{'aria-label': 'primary checkbox'}}/>,
+                            tooltip: "Hide/Show Filter Option",
+                            isFreeAction: true },
+                        { icon: () => <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={abv}
+                                onChange={(e) => {
+                                    setAbv(e.target.value)
+                                }}
+                                style={{width: 150}}
+                            >
+                                <MenuItem value={"All"}>Alcohol Range</MenuItem>
+                                <MenuItem value={'1to2'}>1~2</MenuItem>
+                                <MenuItem value={'2to3'}>2~3</MenuItem>
+                                <MenuItem value={'3to4'}>3~4</MenuItem>
+                                <MenuItem value={'4to5'}>4~5</MenuItem>
+                                <MenuItem value={'5to6'}>5~6</MenuItem>
+                                <MenuItem value={'6to7'}>6~7</MenuItem>
+                                <MenuItem value={'7to8'}>7~8</MenuItem>
+                                <MenuItem value={'8to9'}>8~9</MenuItem>
+                                <MenuItem value={'9to10'}>9~10</MenuItem>
+                                <MenuItem value={'10to11'}>10~11</MenuItem>
+                                <MenuItem value={'11to12'}>11~12</MenuItem>
+                                <MenuItem value={'12to13'}>12~13</MenuItem>
+                                <MenuItem value={'13to14'}>13~14</MenuItem>
+                                <MenuItem value={'14to15'}>14~15</MenuItem>
+                                <MenuItem value={'15more'}>15more</MenuItem>
 
-                    { tooltip: 'select items',
-                      icon: () => <ShoppingCart/>,
-                      onClick: (evt, data) => alert(data.length + '개가 담겼습니다.')
-                    }
-                ]}
-            />
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                className={classes.modal}
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropProps={{
-                    timeout: 5000,
-                }}
-            >
-                <Fade in={open}>
-                    <div className={classes.paper}>
-                        <h2>Animated React Modal</h2>
-                        <p>
-                            {/*{row.name}*/}
-                        </p>
-                    </div>
-                </Fade>
-            </Modal>
-        </div>
+                            </Select>,
+                            isFreeAction: true },
+
+                        { tooltip: 'select items',
+                          icon: () => <ShoppingCart/>,
+                          onClick: (evt, data) => alert(data.length + '개가 담겼습니다.')
+                        }]}
+                />
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropProps={{ timeout: 500 }} >
+                    <Fade in={open}>
+                        <div className={classes.paper}>
+                            <h2>Animated React Modal</h2>
+                            <p>
+                                {/*{row.name}*/}
+                            </p>
+                        </div>
+                    </Fade>
+                </Modal>
+            </div>
         </>
-    )};
+    )
+};
 
 export default BeerList;
