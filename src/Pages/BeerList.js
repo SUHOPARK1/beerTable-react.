@@ -1,11 +1,11 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import {Link} from "react-router-dom";
 import Axios from 'axios';
-import MaterialTable from 'material-table';
+import Table from 'material-table';
 import { Button } from "antd";
 import { FilterOutlined } from "@ant-design/icons"
 import { Modal, makeStyles, Checkbox, Select, MenuItem  } from "@material-ui/core";
-import { ChevronLeft, ChevronRight, Clear, FirstPage, LastPage, Search, ShoppingCart } from '@material-ui/icons/';
+import { ChevronLeft, ChevronRight, Clear, FirstPage, LastPage, Search, ShoppingCart } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -92,7 +92,7 @@ const BeerList = () => {
                                            : ( abv === '13to14' ? beerList.filter(data => data.abv >= 13.00 && data.abv <= 13.99)
                                            : ( abv === '14to15' ? beerList.filter(data => data.abv >= 14.00 && data.abv <= 14.99)
                                            : ( abv === '15more' ? beerList.filter(data => data.abv >= 15.00)
-                                           :  <>No records to display</> ))))))))))))))))
+                                           :  <>No records to display</>                                         ))))))))))))))))
     },[abv])
 
     return (
@@ -106,7 +106,7 @@ const BeerList = () => {
                 </Button>
             </div><br/>
             <div>
-                <MaterialTable
+                <Table
                     icons={tableIcons}
                     columns={columns}
                     data={filterData}
@@ -157,89 +157,81 @@ const BeerList = () => {
                         }]}
                 />
 
-                { row != 0 ? row.ingredients != 0 ? row.ingredients.malt[1] != 0 ?
-                <>
-                <Modal
-                    aria-labelledby="transition-modal-title"
-                    aria-describedby="transition-modal-description"
-                    className={classes.modal}
-                    open={open}
-                    onClose={handleClose}
-                    closeAfterTransition
-                    BackdropProps={{ timeout: 500 }} >
-                    <div className={classes.paper}>
-                        <h2>{row.name}</h2>
-                        <li>tagline: {row.tagline}</li>
-                        <li>firstBrewed: {row.first_brewed}</li>
-                        <li>description: {row.description}</li>
-                        <li>image: <img style={{width:'60px', height:'200px'}} src={row.image_url}/></li>
-                        <li>abv: {row.abv}</li>
-                        <li>ibu: {row.ibu}</li>
-                        <li>target_fg: {row.target_fg}</li>
-                        <li>target_og: {row.target_og}</li>
-                        <li>ebc: {row.ebc}</li>
-                        <li>srm: {row.srm}</li>
-                        <li>ph: {row.ph}</li>
-                        <li>attenuation_level: {row.attenuation_level}</li>
-                        <li>volume-value:{row.volume.value}</li>
-                        <li>volume-unit: {row.volume.unit}</li>
-                        <li>boil_volume-value: {row.boil_volume.value}</li>
-                        <li>boil_volume-unit: {row.boil_volume.unit}</li>
-                        <li>method-mash_temp-temp-value: {row.method.mash_temp[0].temp.value}</li>
-                        <li>method-mash_temp-temp-unit: {row.method.mash_temp[0].temp.unit}</li>
-                        <li>method-mash_temp-duration: {row.method.mash_temp[0].duration}</li>
-                        <li>method-fermentation-temp-value: {row.method.fermentation.temp.value}</li>
-                        <li>method-fermentation-temp-unit: {row.method.fermentation.temp.unit}</li>
-                        <li>method-twist: {row.method.twist}</li>
-                        <li>ingredients-malt1-name: {row.ingredients.malt[0].name}</li>
-                        <li>ingredients-malt1-amount-value: {row.ingredients.malt[0].amount.value}</li>
-                        <li>ingredients-malt1-amount-value: {row.ingredients.malt[0].amount.unit}</li>
-
-                        { row.ingredients.malt[1] != 0 ? <div>
-                        <li>ingredients-malt2-name: {row.ingredients.malt[1].name}</li>
-                        <li>ingredients-malt2-amount-value: {row.ingredients.malt[1].amount.value}</li>
-                        <li>ingredients-malt2-amount-value: {row.ingredients.malt[1].amount.unit}</li>
-                        </div> : <></>}
-
-                        {/*<li>ingredients-malt3-name: {row.ingredients.malt[2].name}</li>*/}
-                        {/*<li>ingredients-malt3-amount-value3 {row.ingredients.malt[2].amount.value}</li>*/}
-                        {/*<li>ingredients-malt3-amount-value: {row.ingredients.malt[2].amount.unit}</li>*/}
-
-                        <li>ingredients-hops1-name: {row.ingredients.hops[0].name}</li>
-                        <li>ingredients-hops1-amount-value: {row.ingredients.hops[0].amount.value}</li>
-                        <li>ingredients-hops1-amount-value: {row.ingredients.hops[0].amount.unit}</li>
-                        <li>ingredients-hops1-add: {row.ingredients.hops[0].add}</li>
-                        <li>ingredients-hops1-attribute: {row.ingredients.hops[0].attribute}</li>
-
-                        {/*<li>ingredients-hops2-name: {row.ingredients.hops[1].name}</li>*/}
-                        {/*<li>ingredients-hops2-amount-value: {row.ingredients.hops[1].amount.value}</li>*/}
-                        {/*<li>ingredients-hops2-amount-value: {row.ingredients.hops[1].amount.unit}</li>*/}
-                        {/*<li>ingredients-hops2-add: {row.ingredients.hops[1].add}</li>*/}
-                        {/*<li>ingredients-hops2-attribute: {row.ingredients.hops[1].attribute}</li>*/}
-                        {/*<li>ingredients-hops3-name: {row.ingredients.hops[2].name}</li>*/}
-                        {/*<li>ingredients-hops3-amount-value: {row.ingredients.hops[2].amount.value}</li>*/}
-                        {/*<li>ingredients-hops3-amount-value: {row.ingredients.hops[2].amount.unit}</li>*/}
-                        {/*<li>ingredients-hops3-add: {row.ingredients.hops[2].add}</li>*/}
-                        {/*<li>ingredients-hops3-attribute: {row.ingredients.hops[2].attribute}</li>*/}
-                        {/*<li>ingredients-hops4-name: {row.ingredients.hops[3].name}</li>*/}
-                        {/*<li>ingredients-hops4-amount-value: {row.ingredients.hops[3].amount.value}</li>*/}
-                        {/*<li>ingredients-hops4-amount-value: {row.ingredients.hops[3].amount.unit}</li>*/}
-                        {/*<li>ingredients-hops4-add: {row.ingredients.hops[3].add}</li>*/}
-                        {/*<li>ingredients-hops4-attribute: {row.ingredients.hops[3].attribute}</li>*/}
-
-                        {/*<li>ingredients-hops5-name: {row.ingredients.hops[4].name}</li>*/}
-                        {/*<li>ingredients-hops5-amount-value: {row.ingredients.hops[4].amount.value}</li>*/}
-                        {/*<li>ingredients-hops5-amount-value: {row.ingredients.hops[4].amount.unit}</li>*/}
-                        {/*<li>ingredients-hops5-add: {row.ingredients.hops[4].add}</li>*/}
-                        {/*<li>ingredients-hops5-attribute: {row.ingredients.hops[4].attribute}</li>*/}
-
-                        <li>ingredients-yeast: {row.ingredients.yeast}</li>
-                        <li>food_pairing: {row.food_pairing}</li>
-                        <li>brewers_tips: {row.brewers_tips}</li>
-                        <li>contributed_by: {row.contributed_by}</li>
-                    </div>
-                </Modal>
-                </> : <></> : <></> : <></>}
+                { row != 0 ?
+                    <>
+                        <Modal
+                            aria-labelledby="transition-modal-title"
+                            aria-describedby="transition-modal-description"
+                            className={classes.modal}
+                            open={open}
+                            onClose={handleClose}
+                            closeAfterTransition
+                            BackdropProps={{ timeout: 500 }} >
+                            <div className={classes.paper}>
+                                <h2>{row.name}</h2>
+                                <li>tagline: {row.tagline}</li>
+                                <li>firstBrewed: {row.first_brewed}</li>
+                                <li>description: {row.description}</li>
+                                <li>image: <img style={{width:'60px', height:'200px'}} src={row.image_url}/></li>
+                                <li>abv: {row.abv}</li>
+                                <li>ibu: {row.ibu}</li>
+                                <li>target_fg: {row.target_fg}</li>
+                                <li>target_og: {row.target_og}</li>
+                                <li>ebc: {row.ebc}</li>
+                                <li>srm: {row.srm}</li>
+                                <li>ph: {row.ph}</li>
+                                <li>attenuation_level: {row.attenuation_level}</li>
+                                <li>volume-value:{row.volume.value}</li>
+                                <li>volume-unit: {row.volume.unit}</li>
+                                <li>boil_volume-value: {row.boil_volume.value}</li>
+                                <li>boil_volume-unit: {row.boil_volume.unit}</li>
+                                <li>method-mash_temp-temp-value: {row.method.mash_temp[0]? row.method.mash_temp[0].temp.value: <></>}</li>
+                                <li>method-mash_temp-temp-unit: { row.method.mash_temp[0] ? row.method.mash_temp[0].temp.unit: <></>}</li>
+                                <li>method-mash_temp-duration: {row.method.mash_temp[0]  ? row.method.mash_temp[0].duration: <></>}</li>
+                                <li>method-fermentation-temp-value: {row.method.fermentation.temp.value}</li>
+                                <li>method-fermentation-temp-unit: {row.method.fermentation.temp.unit}</li>
+                                <li>method-twist: {row.method.twist}</li>
+                                <li>ingredients-malt1-name: {row.ingredients.malt[0] ? row.ingredients.malt[0].name: <></>}</li>
+                                <li>ingredients-malt1-amount-value: {row.ingredients.malt[0] ? row.ingredients.malt[0].amount.value: <></>}</li>
+                                <li>ingredients-malt1-amount-value: {row.ingredients.malt[0] ? row.ingredients.malt[0].amount.unit: <></>}</li>
+                                <li>ingredients-malt2-name: {row.ingredients.malt[1] ? row.ingredients.malt[1].name: <></>}</li>
+                                <li>ingredients-malt2-amount-value: {row.ingredients.malt[1] ? row.ingredients.malt[1].amount.value: <></>}</li>
+                                <li>ingredients-malt2-amount-value: {row.ingredients.malt[1] ? row.ingredients.malt[1].amount.unit: <></>}</li>
+                                <li>ingredients-malt3-name: {row.ingredients.malt[2] ? row.ingredients.malt[2].name: <></>}</li>
+                                <li>ingredients-malt3-amount-value: {row.ingredients.malt[2] ? row.ingredients.malt[2].amount.value: <></>}</li>
+                                <li>ingredients-malt3-amount-value: {row.ingredients.malt[2] ? row.ingredients.malt[2].amount.unit: <></>}</li>
+                                <li>ingredients-hops1-name: {row.ingredients.hops[0] ? row.ingredients.hops[0].name: <></>}</li>
+                                <li>ingredients-hops1-amount-value: {row.ingredients.hops[0] ? row.ingredients.hops[0].amount.value:<></>}</li>
+                                <li>ingredients-hops1-amount-value: {row.ingredients.hops[0]  ? row.ingredients.hops[0].amount.unit: <></>}</li>
+                                <li>ingredients-hops1-add: {row.ingredients.hops[0]  ? row.ingredients.hops[0].add:<></>}</li>
+                                <li>ingredients-hops1-attribute: {row.ingredients.hops[0]  ? row.ingredients.hops[0].attribute: <></>}</li>
+                                <li>ingredients-hops2-name: {row.ingredients.hops[1] ? row.ingredients.hops[1].name: <></>}</li>
+                                <li>ingredients-hops2-amount-value: {row.ingredients.hops[1] ? row.ingredients.hops[1].amount.value:<></>}</li>
+                                <li>ingredients-hops2-amount-value: {row.ingredients.hops[1]  ? row.ingredients.hops[1].amount.unit: <></>}</li>
+                                <li>ingredients-hops2-add: {row.ingredients.hops[1] ? row.ingredients.hops[1].add:<></>}</li>
+                                <li>ingredients-hops2-attribute: {row.ingredients.hops[1] ? row.ingredients.hops[1].attribute: <></>}</li>
+                                <li>ingredients-hops3-name: {row.ingredients.hops[2]  ? row.ingredients.hops[2].name: <></>}</li>
+                                <li>ingredients-hops3-amount-value: {row.ingredients.hops[2]  ? row.ingredients.hops[2].amount.value:<></>}</li>
+                                <li>ingredients-hops3-amount-value: {row.ingredients.hops[2] ? row.ingredients.hops[2].amount.unit: <></>}</li>
+                                <li>ingredients-hops3-add: {row.ingredients.hops[2]  ? row.ingredients.hops[2].add:<></>}</li>
+                                <li>ingredients-hops3-attribute: {row.ingredients.hops[2]  ? row.ingredients.hops[2].attribute: <></>}</li>
+                                <li>ingredients-hops4-name: {row.ingredients.hops[3] ? row.ingredients.hops[3].name: <></>}</li>
+                                <li>ingredients-hops4-amount-value: {row.ingredients.hops[3] ? row.ingredients.hops[3].amount.value:<></>}</li>
+                                <li>ingredients-hops4-amount-value: {row.ingredients.hops[3] ? row.ingredients.hops[3].amount.unit: <></>}</li>
+                                <li>ingredients-hops4-add: {row.ingredients.hops[3] ? row.ingredients.hops[3].add:<></>}</li>
+                                <li>ingredients-hops4-attribute: {row.ingredients.hops[3] ? row.ingredients.hops[3].attribute: <></>}</li>
+                                <li>ingredients-hops5-name: {row.ingredients.hops[4]  ? <>{row.ingredients.hops[4].name}</>: <></>}</li>
+                                <li>ingredients-hops5-amount-value: {row.ingredients.hops[4]? row.ingredients.hops[4].amount.value:<></>}</li>
+                                <li>ingredients-hops5-amount-value: {row.ingredients.hops[4]  ? row.ingredients.hops[4].amount.unit: <></>}</li>
+                                <li>ingredients-hops5-add: {row.ingredients.hops[4] ? row.ingredients.hops[4].add:<></>}</li>
+                                <li>ingredients-hops5-attribute: {row.ingredients.hops[4] ? row.ingredients.hops[4].attribute: <></>}</li>
+                                <li>ingredients-yeast: {row.ingredients.yeast}</li>
+                                <li>food_pairing: {row.food_pairing}</li>
+                                <li>brewers_tips: {row.brewers_tips}</li>
+                                <li>contributed_by: {row.contributed_by}</li>
+                            </div>
+                        </Modal></>
+                    : <></> }
             </div>
         </>
     )};

@@ -7,7 +7,8 @@ const Home = () => {
     return (<center>
             <div>
                 <br/>
-                    <h2>Junior Frontend Engineer 지원자 박수호</h2>
+                    <h2>영갑 Junior Frontend Engineer</h2>
+                    <h2>지원자 박수호</h2>
                 <br/>
                 <Button>
                     <Link to="/BeerList">BeerList 바로가기</Link>
