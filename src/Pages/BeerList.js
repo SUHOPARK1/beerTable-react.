@@ -100,7 +100,7 @@ const BeerList = () => {
             <div><br/>
                 &nbsp;&nbsp;
                 <Button>
-                    <Link to='/Home'>
+                    <Link to='/home'>
                         홈으로
                     </Link>
                 </Button>
@@ -153,7 +153,7 @@ const BeerList = () => {
                             isFreeAction: true },
                         { tooltip: 'select items',
                             icon: () => <ShoppingCart/>,
-                            onClick: (evt, row) => console.log(row)
+                            onClick: (evt, row) =>alert(row.length+'개가 담겼습니다.')
                         }]}
                 />
 

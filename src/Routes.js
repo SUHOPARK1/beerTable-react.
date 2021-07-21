@@ -18,7 +18,7 @@ const Routes = () => {
             <Switch>
                 <Route path="/" exact render={() => <Home/>}/>
                 <Route path="/home" component={Home}/>
-                <Route path="/beerList" component={BeerList}/>
+                <Route path="/beerlist" component={BeerList}/>
             </Switch>
         </Router>
     );
